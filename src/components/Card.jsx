@@ -2,13 +2,13 @@ import React from 'react';
 import '../css/Card.css';
 import CurrentWeather from './CurrentWeather';
 
-function Card() {
+function Card({ city, country, timestamp, feelsLike, ...rest }) {
   return (
     <section className="Card">
-      <h4>Mexico City, Mexico City, Mexico Weather</h4>
-      <h5>as of 10:50 am CDT</h5>
-      <CurrentWeather />
-      <h6>10% chance of rain trhoug 11 am</h6>
+      <h4>{ city }, { country } Weather</h4>
+      <h5>{ timestamp }</h5>
+      <CurrentWeather {...rest} />
+      <h6>feels like { feelsLike }°</h6>
     </section>
   )
 }

@@ -2,6 +2,8 @@
   background: rgba(255,255,255, .25);
   border-radius: .5em;
   box-shadow: 0 0 12px 0 rgba(0,0,0,.2);
+  max-width: 500px;
+  min-width: 400px;
   padding: 1em;
 }
 
