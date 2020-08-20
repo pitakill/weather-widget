@@ -2,32 +2,21 @@ import React from 'react';
 import { func } from 'prop-types';
 import '../css/Form.css';
 
-class Form extends React.Component {
-  state = {
-    value: '',
-  }
+function Form({ onSubmit }) {
+  const [value, setValue] = React.useState('');
 
-  handleChange = e => {
-    const { value } = e.target;
-
-    this.setState({ value });
-  }
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
+    onSubmit(value);
+    setValue('');
+  };
 
-    this.props.onSubmit(this.state.value);
-    this.setState({ value: '' });
-  }
-
-  render () {
-    return (
-      <form className="Form" onSubmit={ this.handleSubmit }>
-        <input type="text" value={this.state.value} onChange={this.handleChange} />
-        <input type="submit" value="Get forecast" />
-      </form>
-    )
-  }
+  return (
+    <form className="Form" onSubmit={ e => handleSubmit(e) }>
+      <input type="text" value={ value } onChange={ e => setValue(e.target.value) } />
+      <input type="submit" value="Get forecast" />
+    </form>
+  )
 }
 
 Form.propTypes = {
