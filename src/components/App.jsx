@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from './Card';
+import Loader from './Loader';
 import {
   getCityByNameAndCountry,
   getCountryByCode,
@@ -11,12 +12,14 @@ import {
 
 class App extends React.Component {
   state = {
+    defaultCity: 'Mexico City',
+    defaultCountry: 'MX',
     forecast: {},
   }
 
   async componentDidMount() {
     try {
-      const city = await getCityByNameAndCountry(this.state.city, 'MX');
+      const city = await getCityByNameAndCountry(this.state.defaultCity, this.state.defaultCountry);
       const forecast = await getWeatherById(city.id); 
       this.setState({ forecast });
     } catch(e) {
@@ -25,10 +28,13 @@ class App extends React.Component {
   }
 
   render () {
-    const { forecast } = this.state;
+    const { forecast,defaultCity, defaultCountry } = this.state;
     return (
       objectIsEmpty(forecast)
-      ? null 
+      ? <Loader 
+          city={ defaultCity }
+          country={ getCountryByCode(defaultCountry) }
+        />
       : <Card 
           city={ forecast.name }
           country={ getCountryByCode(forecast.sys.country) }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { number, string } from 'prop-types';
 import icon from '../assets/icons/weather/animated/day.svg';
 import '../css/CurrentWeather.css';
 
@@ -15,6 +16,13 @@ function CurrentWeather({ temp, sky, max, min }) {
       </section>
     </div>
   )
+}
+
+CurrentWeather.propTypes = {
+  temp: number.isRequired,
+  sky: string.isRequired,
+  max: number.isRequired,
+  min: number.isRequired,
 }
 
 export default CurrentWeather;
