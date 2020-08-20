@@ -79,11 +79,34 @@ const getCurrentTime = () => {
   return `as of ${hours}:${String(minutes).padStart(2, '0')} ${timezone}`
 }
 
+const getIcon = (weather)  => {
+  const hours = (new Date()).getHours();
+
+  let time = 'night';
+  if (7 < hours && hours < 19) {
+    time = 'day';
+  }
+
+  const current = (weather => {
+    switch (weather.toLowerCase()) {
+      case 'cloud':
+      case 'clouds': 
+      case 'haze':
+        return 'cloudy-';
+      default:
+        return '';
+    }
+  })(weather);
+
+  return `${current}${time}-1`;
+} 
+
 export {
   getCityByNameAndCountry,
   getCityByName,
   getCountryByCode,
   getCurrentTime,
+  getIcon,
   getWeatherById,
   kelvin2celcius,
   objectIsEmpty,

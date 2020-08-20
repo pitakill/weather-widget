@@ -1,7 +1,9 @@
 import React from 'react';
 import { number, string } from 'prop-types';
-import icon from '../assets/icons/weather/animated/day.svg';
+import { getIcon } from '../helpers';
 import '../css/CurrentWeather.css';
+
+const path = 'assets/icons/weather/animated';
 
 function CurrentWeather({ temp, sky, max, min }) {
   return (
@@ -11,7 +13,7 @@ function CurrentWeather({ temp, sky, max, min }) {
         <div>{ sky }</div>
       </section>
       <section>
-        <img src={ icon } alt="weather icon" />
+        <img src={ `${process.env.PUBLIC_URL}/${path}/${getIcon(sky)}.svg` } alt="weather icon" />
         <span className="forecast">{ max }°/{ min }°</span>
       </section>
     </div>
