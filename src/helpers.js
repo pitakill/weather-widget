@@ -93,15 +93,17 @@ const getIcon = (weather)  => {
       case 'clouds': 
       case 'haze':
         return 'cloudy-';
+      case 'clear':
       default:
         return '';
     }
   })(weather);
 
-  return `${current}${time}-1`;
+  return `${current}${time}${current ? '-1' : ''}`;
 } 
 
 export {
+  getCitiesByCountry,
   getCityByNameAndCountry,
   getCityByName,
   getCountryByCode,
