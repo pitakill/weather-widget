@@ -18,77 +18,71 @@ const defaultCities = [
 ];
 const defaultCountry = 'MX';
 
-class App extends React.Component {
-  state = {
-    cities: defaultCities,
-    country: defaultCountry,
-    forecasts: [],
-    value: '',
-  }
+function App() {
+  const [cities, setCities] = React.useState([]);
+  const [forecasts, setForecasts] = React.useState([]);
 
-  async componentDidMount() {
-    try {
-      const mexicoCities = await getCitiesByCountry(this.state.country);
-      // Buscar las ciudades por defecto
-      const wantedCities = mexicoCities.filter(
-        city => this.state.cities.includes(city.name)
-      );
+  React.useEffect(() => {
+    async function getForecasts() {
+      try {
+        const mexicoCities = await getCitiesByCountry(defaultCountry);
+        // Buscar las ciudades por defecto
+        const wantedCities = mexicoCities.filter(
+          city => defaultCities.includes(city.name)
+        );
 
-      // Traer información de cada una de las ciudades buscadas
-      const forecasts = await Promise.all(
-        wantedCities.map(
-          async city => await getWeatherById(city.id)
-        )
-      );
+        // Traer información de cada una de las ciudades buscadas
+        const forecasts = await Promise.all(
+          wantedCities.map(
+            async city => await getWeatherById(city.id)
+          )
+        );
 
-      this.setState({ forecasts });
-    } catch(e) {
-      console.error(e);
+        setCities(wantedCities);
+        setForecasts(forecasts);
+      } catch(e) {
+        console.error(e);
+      }
     }
-  }
+    getForecasts();
+  }, []);
 
-  requestCity = async name => {
-    const city = await getCityByNameAndCountry(name, this.state.country);
+  const requestCity = async name => {
+    const city = await getCityByNameAndCountry(name, defaultCountry);
 
     // Si no hay ciudad con ese nombre, salimos de la función.
     if (!city) return;
 
     const forecast = await getWeatherById(city.id);
 
-    this.setState({ 
-      cities: [...this.state.cities, city],
-      forecasts: [...this.state.forecasts, forecast],
-    })
+    setCities([...cities, city]);
+    setForecasts([...forecasts, forecast]);
   }
 
-  render () {
-    const { forecasts, defaultCity, defaultCountry } = this.state;
-    return (
-      forecasts.length === 0
-      ? <Loader 
-          city={ defaultCity }
-          country={ getCountryByCode(defaultCountry) }
-        />
-      : <>
-          <Form onSubmit={ this.requestCity } />
-          {
-            forecasts.map(forecast =>
-              <Card 
-                key={ forecast.id }
-                city={ forecast.name }
-                country={ getCountryByCode(forecast.sys.country) }
-                temp={ kelvin2celcius(forecast.main.temp) }
-                max={ kelvin2celcius(forecast.main.temp_max) }
-                min={ kelvin2celcius(forecast.main.temp_min) }
-                sky={ forecast.weather[0].main }
-                timestamp={ getCurrentTime() }
-                feelsLike={ kelvin2celcius(forecast.main.feels_like) }
-              />
-            )
-          }
-        </>
-    );
-  }
+  return (
+    forecasts.length === 0
+    ? <Loader
+        country={ getCountryByCode(defaultCountry) }
+      />
+    : <>
+        <Form onSubmit={ requestCity } />
+        {
+          forecasts.map(forecast =>
+            <Card
+              key={ forecast.id }
+              city={ forecast.name }
+              country={ getCountryByCode(forecast.sys.country) }
+              temp={ kelvin2celcius(forecast.main.temp) }
+              max={ kelvin2celcius(forecast.main.temp_max) }
+              min={ kelvin2celcius(forecast.main.temp_min) }
+              sky={ forecast.weather[0].main }
+              timestamp={ getCurrentTime() }
+              feelsLike={ kelvin2celcius(forecast.main.feels_like) }
+            />
+          )
+        }
+      </>
+  );
 }
 
 export default App;
