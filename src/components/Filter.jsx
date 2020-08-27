@@ -1,26 +1,23 @@
 import React from 'react';
-import Card from './Card';
-import {
-  getCountryByCode,
-  getCurrentTime,
-  kelvin2celcius,
-} from '../helpers';
+import Cards from './Cards';
+import Context from './Context';
 
-function Filter({ items }) {
+function Filter(props) {
   return (
-    items.map(i =>
-      <Card
-        key={ i.id }
-        city={ i.name }
-        country={ getCountryByCode(i.sys.country) }
-        temp={ kelvin2celcius(i.main.temp) }
-        max={ kelvin2celcius(i.main.temp_max) }
-        min={ kelvin2celcius(i.main.temp_min) }
-        sky={ i.weather[0].main }
-        timestamp={ getCurrentTime() }
-        feelsLike={ kelvin2celcius(i.main.feels_like) }
-      />
-    )
+    <Context.Consumer>
+      {
+        context =>
+          <>
+            <Cards 
+              forecasts={
+                context.forecasts.filter(
+                  f => f.name.charAt(0) === props.match.url.charAt(1)
+                )
+              } 
+            />
+          </>
+      }
+    </Context.Consumer>
   )
 }
 
