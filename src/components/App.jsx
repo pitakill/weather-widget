@@ -63,13 +63,17 @@ function App() {
     setForecasts([...forecasts, forecast]);
   }
 
+  const letters = new Set();
+  cities.forEach(city => letters.add(city.name.charAt(0)));
+  const menu = Array.from(letters);
+
   return (
     forecasts.length === 0
     ? <Loader
         country={ getCountryByCode(defaultCountry) }
       />
     : <BrowserRouter>
-        <Menu />
+        <Menu items={ menu } />
         <Main>
           <Route exact path="/" component={ () =>
             <>
@@ -91,20 +95,17 @@ function App() {
                 }
               </>
           } />
-          <Route 
-            exact 
-            path="/g" 
-            component={
-              () => <Filter items={ forecasts.filter(f => f.name.charAt(0) === 'G') } />
-            } 
-          />
-          <Route 
-            exact 
-            path="/m" 
-            component={
-              () => <Filter items={ forecasts.filter(f => f.name.charAt(0) === 'M') } />
-            } 
-          />
+          {
+            menu.map(m =>
+              <Route 
+                key={m}
+                path={`/${m.toLowerCase()}`} 
+                render={
+                  () => <Filter items={ forecasts.filter(f => f.name.charAt(0) === m) } />
+                } 
+              />
+            )
+          }
         </Main>
       </BrowserRouter>
   );
