@@ -10,7 +10,10 @@ function Menu() {
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/test">Test</Link>
+          <Link to="/g">G</Link>
+        </li>
+        <li>
+          <Link to="/m">M</Link>
         </li>
       </ul>
     </nav>

@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import Card from './Card';
 import Loader from './Loader';
+import Filter from './Filter';
 import Form from './Form';
 import Main from './Main';
 import Menu from './Menu';
@@ -63,36 +64,49 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <Menu />
-      <Main>
-        <Route exact path="/" component={ () =>
-          forecasts.length === 0
-          ? <Loader
-              country={ getCountryByCode(defaultCountry) }
-            />
-          : <>
+    forecasts.length === 0
+    ? <Loader
+        country={ getCountryByCode(defaultCountry) }
+      />
+    : <BrowserRouter>
+        <Menu />
+        <Main>
+          <Route exact path="/" component={ () =>
+            <>
               <Form onSubmit={ requestCity } />
-              {
-                forecasts.map(forecast =>
-                  <Card
-                    key={ forecast.id }
-                    city={ forecast.name }
-                    country={ getCountryByCode(forecast.sys.country) }
-                    temp={ kelvin2celcius(forecast.main.temp) }
-                    max={ kelvin2celcius(forecast.main.temp_max) }
-                    min={ kelvin2celcius(forecast.main.temp_min) }
-                    sky={ forecast.weather[0].main }
-                    timestamp={ getCurrentTime() }
-                    feelsLike={ kelvin2celcius(forecast.main.feels_like) }
-                  />
-                )
-              }
-            </>
-        } />
-        <Route exact path="/test" component={()=> "Hola"} />
-      </Main>
-    </BrowserRouter>
+                {
+                  forecasts.map(forecast =>
+                    <Card
+                      key={ forecast.id }
+                      city={ forecast.name }
+                      country={ getCountryByCode(forecast.sys.country) }
+                      temp={ kelvin2celcius(forecast.main.temp) }
+                      max={ kelvin2celcius(forecast.main.temp_max) }
+                      min={ kelvin2celcius(forecast.main.temp_min) }
+                      sky={ forecast.weather[0].main }
+                      timestamp={ getCurrentTime() }
+                      feelsLike={ kelvin2celcius(forecast.main.feels_like) }
+                    />
+                  )
+                }
+              </>
+          } />
+          <Route 
+            exact 
+            path="/g" 
+            component={
+              () => <Filter items={ forecasts.filter(f => f.name.charAt(0) === 'G') } />
+            } 
+          />
+          <Route 
+            exact 
+            path="/m" 
+            component={
+              () => <Filter items={ forecasts.filter(f => f.name.charAt(0) === 'M') } />
+            } 
+          />
+        </Main>
+      </BrowserRouter>
   );
 }
 
