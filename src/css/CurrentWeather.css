@@ -1,6 +1,7 @@
 .CurrentWeather {
   align-items: flex-end;
   display: flex;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   justify-content: space-between;
 }
 

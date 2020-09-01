@@ -1,23 +1,27 @@
 import React from 'react';
+import AppBar from '@material-ui/core/AppBar';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import { Link } from 'react-router-dom';
-import '../css/Menu.css';
 
-function Menu({ items }) {
+function Menu({ changeRoute, items, route }) {
+  const menu = [ 'Home', ...items.sort() ];
+
   return (
-    <nav className="Menu">
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
+    <AppBar position="static">
+      <Tabs value={route} onChange={changeRoute}>
         {
-          items.sort().map(m =>
-            <li key={ m } >
-              <Link to={ `/${m}` }>{ m }</Link>
-            </li>
+          menu.map(m =>
+            <Tab 
+              component={Link}
+              key={ m } 
+              label={ m }
+              to={`/${m}`}
+            />
           )
         }
-      </ul>
-    </nav>
+      </Tabs>
+    </AppBar>
   )
 }
 
