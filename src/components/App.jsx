@@ -1,11 +1,11 @@
 import React from 'react';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Container from '@material-ui/core/Container';
 import Context from './Context';
-import Loader from './Loader';
 import Router from './Router';
 import {
   getCitiesByCountry,
   getCityByNameAndCountry,
-  getCountryByCode,
   getWeatherById,
 } from '../helpers';
 
@@ -61,18 +61,18 @@ function App() {
   cities.forEach(city => letters.add(city.name.charAt(0)));
 
   return (
-    <Context.Provider value={{
-      forecasts,
-      requestCity,
-    }}>
-      {
-        forecasts.length === 0
-        ? <Loader
-            country={ getCountryByCode(defaultCountry) }
-          />
+    <Container>
+      <Context.Provider value={{
+        forecasts,
+        requestCity,
+      }}>
+        {
+          forecasts.length === 0
+          ? <CircularProgress />
           : <Router menu={ [...letters] } />
-      }
-    </Context.Provider>
+        }
+      </Context.Provider>
+    </Container>
   );
 }
 

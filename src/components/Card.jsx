@@ -1,6 +1,9 @@
 import React from 'react';
+import CardMui from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Typography from '@material-ui/core/Typography';
 import { string } from 'prop-types';
-import '../css/Card.css';
 import CurrentWeather from './CurrentWeather';
 import {
   getCountryByCode,
@@ -24,17 +27,23 @@ function Card(props) {
   } = props;
 
   return (
-    <section className="Card">
-      <h4>{ city }, { getCountryByCode(country) } Weather</h4>
-      <h5>{ getCurrentTime() }</h5>
-      <CurrentWeather 
-        max={ kelvin2celcius(temp_max) }
-        min={ kelvin2celcius(temp_min) }
-        sky={ weather[0].main }
-        temp={ kelvin2celcius(temp) }
+    <CardMui elevation={3}>
+      <CardHeader 
+        title={ `${city}, ${getCountryByCode(country)} Weather` }
+        subheader={ getCurrentTime() }
       />
-      <h6>feels like { kelvin2celcius(feels_like) }°</h6>
-    </section>
+      <CardContent>
+        <CurrentWeather 
+          max={ kelvin2celcius(temp_max) }
+          min={ kelvin2celcius(temp_min) }
+          sky={ weather[0].main }
+          temp={ kelvin2celcius(temp) }
+        />
+        <Typography variant="h6">
+          feels like { kelvin2celcius(feels_like) }°
+        </Typography>
+      </CardContent>
+    </CardMui>
   )
 }
 
